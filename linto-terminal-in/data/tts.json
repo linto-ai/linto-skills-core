@@ -2,8 +2,8 @@
   "en-US": {
     "say": {
       "streaming_already_started": {
-        "phonetic": "Streaming is already started",
-        "text": "Streaming is already started"
+        "phonetic": "Streaming was already started",
+        "text": "Streaming was already started"
       },
       "streaming_not_started": {
         "phonetic": "No streaming request has been done",

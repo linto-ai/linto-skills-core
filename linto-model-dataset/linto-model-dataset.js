@@ -22,7 +22,7 @@ class LintoModelDataset extends LintoCoreNode {
 
   async init(RED) {
     //Create API on host : http://<host>:<port>/red-nodes/<:flowId>/dataset/tock
-    RED.httpNode.get(`/${this.node.z}/dataset/tock`, (req, res) => {
+    RED.httpNode.get(`/${this.node.z}/dataset/tock`, async (req, res) => {
       const configEvaluate = this.getFlowConfig('configEvaluate')
       const flowLanguage = this.getFlowConfig('language')
 
@@ -30,7 +30,7 @@ class LintoModelDataset extends LintoCoreNode {
         let skillsNode = redAction.getNodesFromName.call(RED, this.node.z, 'skill')
         let dictionaryNode = redAction.getNodesFromName.call(RED, this.node.z, 'dictionary')
 
-        let output = seeding.tock(skillsNode, dictionaryNode, configEvaluate, flowLanguage)
+        let output = await seeding.tock(skillsNode, dictionaryNode, configEvaluate, flowLanguage)
         res.send(output)
       } else {
         res.send({ err: `This flow don't use tock api` })
@@ -38,7 +38,7 @@ class LintoModelDataset extends LintoCoreNode {
     })
 
     //Create API on host : http://<host>:<port>/red-nodes/<:flowId>/dataset/linstt
-    RED.httpNode.get(`/${this.node.z}/dataset/linstt`, (req, res) => {
+    RED.httpNode.get(`/${this.node.z}/dataset/linstt`, async (req, res) => {
       const configTranscribe = this.getFlowConfig('configTranscribe')
       const flowLanguage = this.getFlowConfig('language')
 
@@ -46,7 +46,7 @@ class LintoModelDataset extends LintoCoreNode {
         let skillsNode = redAction.getNodesFromName.call(RED, this.node.z, 'skill')
         let dictionaryNode = redAction.getNodesFromName.call(RED, this.node.z, 'dictionary')
 
-        let output = seeding.linstt(skillsNode, dictionaryNode, flowLanguage)
+        let output = await seeding.linstt(skillsNode, dictionaryNode, flowLanguage)
         res.send(output)
       } else {
         res.send({ err: `This flow don't use linstt api` })

@@ -1,10 +1,14 @@
 {
-  "configuration" : {
-    "message" : "Unvalid flow configuration. The requested topic don't have the skill in the flow",
+  "missingStreamingSkill" : {
+    "message" : "Unvalid flow configuration. The streaming skill is not in the flow",
     "code" : 500
   },
-  "publishedTopic" : {
-    "message" : "Invalid published flow topic",
+  "unsuportedTopic" : {
+    "message" : "Unsuported topic",
+    "code" : 500
+  },
+  "unsuportedSkill" : {
+    "message" : "The flow don't have the require skill",
     "code" : 500
   }
 }

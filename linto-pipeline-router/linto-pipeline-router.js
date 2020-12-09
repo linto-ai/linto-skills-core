@@ -44,9 +44,8 @@ function routerOutputManager(msg) {
       this.wireNode.nodeSend(this.node, [null, null, msg])  //TODO: Linto don't support action yet
       break
     default:
-      //TODO: Send message to Linto
-      this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.unknownTopic, error.publishedTopic)
-      throw new Error(error.publishedTopic.message)
+      this.sendPayloadToLinTO(msg.payload.topic, { streaming: { status: "error", message: error.unsuportedTopic } })
+      throw new Error(error.unsuportedTopic.message)
       break
   }
 }
@@ -55,5 +54,5 @@ function checkNodeAndSendMsg(searchedNode, msg, msgIndex) {
   let nextNode = redAction.findNodeType.call(this.RED, this.node.z, searchedNode)
   if (nextNode && this.node.wires[msgIndex].find(id => nextNode.id === id))
     this.wireNode.nodeSend(this.node, msg)
-  else this.notifyEventError(msg[msgIndex].payload.topic, tts[this.getFlowConfig('language').language].say.unknown, error.configuration)
+  else this.sendPayloadToLinTO(msg.payload.topic, { error: { status: "error", message: error.unsuportedSkill } })
 }

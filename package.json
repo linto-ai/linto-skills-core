@@ -1,6 +1,6 @@
 {
   "name": "@linto-ai/node-red-linto-core",
-  "version": "0.0.13-8",
+  "version": "0.0.15-1",
   "description": "Recommanded skills to be used by LinTO",
   "scripts": {
     "test": "mocha test",

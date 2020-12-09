@@ -49,7 +49,11 @@ function toLintoByEvent(msg) {
     output.behavior = msg.payload
     output.transcript = msg.transcript
 
-    this.mqtt.publish(msg.topic, JSON.stringify(output))
+    let qos = 2
+    if (msg.qos !== undefined)
+      qos = msg.qos
+
+    this.mqtt.publish(msg.topic, JSON.stringify(output), qos)
     this.sendStatus('green', 'ring', NODE_SUCCES_MESSAGE)
   }
 }

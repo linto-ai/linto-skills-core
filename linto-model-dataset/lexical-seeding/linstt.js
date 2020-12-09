@@ -30,10 +30,8 @@ module.exports = (skills, dictionaries, flowLanguage) => {
     let entity, entityError
 
     dictionary.data.split(BACKLINE_SEPARATOR).map(cmd => {
-
       cmd = cmd.toLowerCase()
       if (cmd.indexOf(DICTIONARY_LANGUAGE_SEPARATOR) > -1) {
-
         if (entity && (entity.lang === flowLanguage.language || entity.lang === flowLanguage.lang)) {
           seed.data.entities.push(entity)
           entityError.items.length !== 0 ? seed.errors.entities.push(entityError) : undefined
@@ -45,7 +43,7 @@ module.exports = (skills, dictionaries, flowLanguage) => {
         if (!seed)
           seed = { lang: flowLanguage.language, data: { intents: [], entities: [] }, errors: { intents: [], entities: [] } }
 
-      } else if (cmd !== '' && entity.items.indexOf(cmd) === -1) {
+      } else if (cmd !== '' && entity !== undefined && entity.items.indexOf(cmd) === -1) {
         isValidCmd(cmd) ? entity.items.push(cmd) : entityError.items.push(cmd)
       }
     })
