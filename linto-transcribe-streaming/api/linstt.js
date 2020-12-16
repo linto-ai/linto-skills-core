@@ -31,6 +31,8 @@ function startWS(host, id, topic, msg) {
   websocket[id].linto_topic = topic
   websocket[id].skillLinto = this
 
+
+
   websocket[id].on('open', function open() {
     if (msg.payload.config) {
       delete msg.payload.auth_token
@@ -62,5 +64,8 @@ function stopWS(id) {
 }
 
 function onMessage(chunk, _id) {
+  console.log('#####')
+  console.log(_id)
+  console.log(websocket)
   websocket[_id].send(chunk)
 }
