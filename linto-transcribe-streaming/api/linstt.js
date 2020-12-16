@@ -65,7 +65,5 @@ function stopWS(id) {
 
 function onMessage(chunk, _id) {
   console.log('#####')
-  console.log(_id)
-  console.log(websocket)
   websocket[_id].send(chunk)
 }
