@@ -19,9 +19,6 @@ class LintoTranscribe extends LintoCoreEventNode {
       transcribe: { ...this.getFlowConfig('configTranscribe') }
     }
 
-    console.log('#####')
-    console.log(this.config.transcribe)
-
     this.request = request
     this.wireEvent = wireEvent.init(RED)
     this.init()

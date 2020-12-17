@@ -32,7 +32,6 @@ function startWS(host, id, topic, msg) {
   websocket[id].skillLinto = this
 
 
-
   websocket[id].on('open', function open() {
     if (msg.payload.config) {
       delete msg.payload.auth_token
@@ -55,15 +54,17 @@ function startWS(host, id, topic, msg) {
 }
 
 function stopWS(id) {
-  websocket[id].send('{"eof" : 1}')
-  websocket[id].on('close', function close() {
-    console.log('disconnected')
-  })
-  websocket[id].close()
+  if (websocket[id] && websocket[id].readyState === WebSocket.OPEN) {
+    websocket[id].send('{"eof" : 1}')
+    websocket[id].on('close', function close() {
+      console.log('disconnected')
+    })
+    websocket[id].close()
+  }
   delete websocket[id]
 }
 
 function onMessage(chunk, _id) {
-  console.log('#####')
-  websocket[_id].send(chunk)
+  if (websocket[_id] && websocket[_id].readyState === WebSocket.OPEN)
+    websocket[_id].send(chunk)
 }
