@@ -1,3 +1,21 @@
+# 0.0.16
+- Remove auth in skill (managed with MQTT-Mongo)
+
+# 0.0.15
+- Fix tts phonetic or text
+
+# 0.0.14
+- Fix tts phonetic or text
+
+# 0.0.13
+- Fix tts phonetic or text
+
+# 0.0.12
+- Fix tts phonetic or text
+
+# 0.0.11
+- Fix tts phonetic or text
+
 # 0.0.10
 - Fix tts phonetic or text
 
