@@ -25,14 +25,15 @@ class LintoApplicationIn extends LintoConnectCoreNode {
 
   async init() {
     await this.autoloadTopic(__dirname + '/topic')
+    await this.configure()
 
     let mqttConfig = this.getFlowConfig('confMqtt')
     if (mqttConfig) {
-      await this.mqtt.connect(mqttConfig)
+      let res = await this.mqtt.connect(mqttConfig)
+
       this.mqtt.subscribeToLinto(mqttConfig.fromLinto, DEFAULT_TOPIC, TOPIC_SUBSCRIBE)
       this.mqtt.onMessage(mqttHandler.bind(this), TOPIC_FILTER)
 
-      await this.configure()
     } else this.sendStatus('yellow', 'ring', 'Configuration is missing')
   }
 }
