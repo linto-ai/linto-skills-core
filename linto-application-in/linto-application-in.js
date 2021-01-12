@@ -1,6 +1,5 @@
 const debug = require('debug')('linto:skill:v2:core:linto-application-in')
 const LintoConnectCoreNode = require('@linto-ai/linto-components').nodes.lintoConnectCoreNode
-const { authToken } = require('@linto-ai/linto-components').connect
 const { wireEvent } = require('@linto-ai/linto-components').components
 
 const TOPIC_SUBSCRIBE = '#'
@@ -16,51 +15,38 @@ module.exports = function (RED) {
   RED.nodes.registerType('linto-application-in', Node)
 }
 
-
 class LintoApplicationIn extends LintoConnectCoreNode {
   constructor(RED, node, config) {
     super(node, config)
 
     this.wireEvent = wireEvent.init(RED)
     this.init()
-
-    this.setFlowConfig('application_auth_type', {
-      auth_android: config.auth_android,
-      auth_web: config.auth_web
-    })
-
   }
 
   async init() {
-    if (this.node.context().global.authServerHost !== undefined) {
-      this.authToken = authToken.init('http://' + this.node.context().global.authServerHost + '/local/isAuth')
+    await this.autoloadTopic(__dirname + '/topic')
+    await this.configure()
 
-      await this.autoloadTopic(__dirname + '/topic')
+    let mqttConfig = this.getFlowConfig('confMqtt')
+    if (mqttConfig) {
+      let res = await this.mqtt.connect(mqttConfig)
 
-      let mqttConfig = this.getFlowConfig('confMqtt')
-      if (mqttConfig) {
-        await this.mqtt.connect(mqttConfig)
-        this.mqtt.subscribeToLinto(mqttConfig.fromLinto, DEFAULT_TOPIC, TOPIC_SUBSCRIBE)
-        this.mqtt.onMessage(mqttHandler.bind(this), TOPIC_FILTER)
+      this.mqtt.subscribeToLinto(mqttConfig.fromLinto, DEFAULT_TOPIC, TOPIC_SUBSCRIBE)
+      this.mqtt.onMessage(mqttHandler.bind(this), TOPIC_FILTER)
 
-        await this.configure()
-      } else this.sendStatus('yellow', 'ring', 'Configuration is missing')
-
-    } else this.sendStatus('red', 'ring', 'Authentification server not setup')
+    } else this.sendStatus('yellow', 'ring', 'Configuration is missing')
   }
 }
 
 
 async function mqttHandler(topic, payload) {
-  const applicationAuthType = this.getFlowConfig('application_auth_type')
-
   const [_clientCode, _channel, _sn, _etat, _type, _id] = topic.split('/')
   switch (_etat) {
     case 'nlp':
-      this.topicHandler.nlp.call(this, topic, payload, applicationAuthType)
+      this.topicHandler.nlp.call(this, topic, payload)
       break
     case 'streaming':
-      this.topicHandler.lvcsrstreaming.call(this, topic, payload, applicationAuthType)
+      this.topicHandler.lvcsrstreaming.call(this, topic, payload)
       break
     case 'action':
       this.topicHandler.action.call(this, topic, payload)
