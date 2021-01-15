@@ -79,11 +79,10 @@ if (isMainThread) {
             if (wiredEntity[entity] === undefined)
               wiredEntity[entity] = {}
             let wiredNode = entities[entity][dictionaryId]
-            wiredEntity[entity][wiredNode.name] = wiredNode.cmd
+            wiredEntity[entity][wiredNode.name.toLowerCase()] = wiredNode.cmd
           }
         }
       }
-
       skill.command.split(BACKLINE_SEPARATOR).map(cmd => {
         cmd = cmd.toLowerCase()
         cmd = cmd.replace(COMMAND_DELIMITER, '')

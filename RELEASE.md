@@ -1,3 +1,9 @@
+# 0.0.18
+- Fix lexical seeding tock error
+
+# 0.0.17
+- Added auto reconnect on Mqtt skill
+
 # 0.0.16
 - Remove auth in skill (managed with MQTT-Mongo)
 
