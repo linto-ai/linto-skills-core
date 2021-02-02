@@ -2,6 +2,8 @@ const debug = require('debug')(`linto:skill:v2:core:transcribe-streaming:linstt`
 const WebSocket = require('ws')
 const DEFAULT_CONFIG = '{"config": {"sample_rate":16000, "metadata":1 }}'
 
+const wsPrefix = ['ws://', 'wss://']
+
 let websocket = {}
 
 module.exports = async function (msg) {
@@ -26,31 +28,39 @@ module.exports = async function (msg) {
 }
 
 function startWS(host, id, topic, msg) {
-  websocket[id] = new WebSocket('wss://' + host)
-  websocket[id].linto_id = id
-  websocket[id].linto_topic = topic
-  websocket[id].skillLinto = this
+  try {
+    let wsFind = wsPrefix.find(prefixe => host.includes(prefixe))
+    if (!wsFind) host = 'ws://' + host
 
 
-  websocket[id].on('open', function open() {
-    if (msg.payload.config) {
-      delete msg.payload.auth_token
-      this.send(JSON.stringify(msg.payload))
-    }
-    else this.send(DEFAULT_CONFIG)
-  })
+    websocket[id] = new WebSocket(host)
+    websocket[id].linto_id = id
+    websocket[id].linto_topic = topic
+    websocket[id].skillLinto = this
 
-  websocket[id].on('message', function incoming(msg) {
-    const topicChunk = this.linto_topic + '/chunk'
-    const topicFinal = this.linto_topic + '/final'
 
-    let data = JSON.parse(msg)
-    if ('partial' in data) this.skillLinto.sendPayloadToLinTO(topicChunk, { streaming: { partial: data.partial } }, 0)
-    else if ('text' in data && !('words' in data)) this.skillLinto.sendPayloadToLinTO(topicChunk, { streaming: { text: data.text } })
-    else if ('words' in data) this.skillLinto.sendPayloadToLinTO(topicFinal, { streaming: { "status": "final", result: JSON.stringify(data, null, 4) } })
-    else if ('eod' in data) this.close()
-    else console.error("unsupported msg", data)
-  })
+    websocket[id].on('open', function open() {
+      if (msg.payload.config) {
+        delete msg.payload.auth_token
+        this.send(JSON.stringify(msg.payload))
+      }
+      else this.send(DEFAULT_CONFIG)
+    })
+
+    websocket[id].on('message', function incoming(msg) {
+      const topicChunk = this.linto_topic + '/chunk'
+      const topicFinal = this.linto_topic + '/final'
+
+      let data = JSON.parse(msg)
+      if ('partial' in data) this.skillLinto.sendPayloadToLinTO(topicChunk, { streaming: { partial: data.partial } }, 0)
+      else if ('text' in data && !('words' in data)) this.skillLinto.sendPayloadToLinTO(topicChunk, { streaming: { text: data.text } })
+      else if ('words' in data) this.skillLinto.sendPayloadToLinTO(topicFinal, { streaming: { "status": "final", result: JSON.stringify(data, null, 4) } })
+      else if ('eod' in data) this.close()
+      else console.error("unsupported msg", data)
+    })
+  } catch (err) {
+    throw(err)
+  }
 }
 
 function stopWS(id) {

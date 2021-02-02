@@ -1,3 +1,7 @@
+# 0.0.19
+- Fix Ws/Wss host connection
+- Handle error on fail to connect
+
 # 0.0.18
 - Fix lexical seeding tock error
 
