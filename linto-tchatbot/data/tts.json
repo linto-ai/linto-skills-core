@@ -1,0 +1,26 @@
+{
+  "en-US": {
+    "say": {
+      "unknown": {
+        "phonetic": "I don't known what to do",
+        "text": "I don't known what to do"
+      },
+      "missingText": {
+        "phonetic": "No text found",
+        "text": "No text found"
+      }
+    }
+  },
+  "fr-FR": {
+    "say": {
+      "unknown": {
+        "phonetic": "Je ne sais pas quoi faire",
+        "text": "Je ne sais pas quoi faire"
+      },
+      "missingText": {
+        "phonetic": "Pas de text détecté",
+        "text": "Pas de text détecté"
+      }
+    }
+  }
+}

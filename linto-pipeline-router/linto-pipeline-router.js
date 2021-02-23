@@ -40,13 +40,13 @@ function routerOutputManager(msg) {
     case 'streaming':
       checkNodeAndSendMsg.call(this, 'linto-transcribe-streaming', [null, msg, null], 1)
       break
-    case 'action':
-      this.wireNode.nodeSend(this.node, [null, null, msg])  //TODO: Linto don't support action yet
+    case 'tchatbot':
+      checkNodeAndSendMsg.call(this, 'linto-tchatbot', [null, null, msg], 2)
+      // this.wireNode.nodeSend(this.node, [null, null, msg])  //TODO: Linto don't support action yet
       break
     default:
       this.sendPayloadToLinTO(msg.payload.topic, { streaming: { status: "error", message: error.unsuportedTopic } })
       throw new Error(error.unsuportedTopic.message)
-      break
   }
 }
 

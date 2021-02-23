@@ -3,7 +3,7 @@ const LintoConnectCoreNode = require('@linto-ai/linto-components').nodes.lintoCo
 const { wireEvent } = require('@linto-ai/linto-components').components
 
 const TOPIC_SUBSCRIBE = '#'
-const TOPIC_FILTER = ['nlp', 'streaming', 'action']
+const TOPIC_FILTER = ['nlp', 'streaming', 'tchatbot']
 
 const DEFAULT_TOPIC = '+'
 
@@ -33,11 +33,9 @@ class LintoApplicationIn extends LintoConnectCoreNode {
 
       this.mqtt.subscribeToLinto(mqttConfig.fromLinto, DEFAULT_TOPIC, TOPIC_SUBSCRIBE)
       this.mqtt.onMessage(mqttHandler.bind(this), TOPIC_FILTER)
-
     } else this.sendStatus('yellow', 'ring', 'Configuration is missing')
   }
 }
-
 
 async function mqttHandler(topic, payload) {
   const [_clientCode, _channel, _sn, _etat, _type, _id] = topic.split('/')
@@ -48,8 +46,9 @@ async function mqttHandler(topic, payload) {
     case 'streaming':
       this.topicHandler.lvcsrstreaming.call(this, topic, payload)
       break
-    case 'action':
-      this.topicHandler.action.call(this, topic, payload)
+    case 'tchatbot':
+      // For tchatbot _type = _id
+      this.topicHandler.tchatbot.call(this, topic, payload)
       break
     default:
       const outTopic = `${_clientCode}/tolinto/${_sn}/streaming/${_id}`
