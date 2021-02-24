@@ -14,7 +14,8 @@ module.exports = function (RED) {
     if (n.api === 'tock') {
       this.config.applicationName = n.appname
       this.config.namespace = n.namespace
-      this.config.applicationid = n.applicationid
+      this.config.botId = n.botId
+      this.config.auth = 'Basic ' + Buffer.from(n.username + ':' + n.password).toString('base64')
     }
   }
   RED.nodes.registerType("linto-config-tchatbot", LintoConfigTchatbot)

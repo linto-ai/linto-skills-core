@@ -2,21 +2,19 @@
   "linto-config-tchatbot": {
     "label": {
       "host": "Host",
-      "api": "API",
       "applicationName": "App Name",
       "namespace": "namespace",
-      "applicationid" : "App id"
+      "botId" : "Bot id",
+      "username": "Username",
+      "password" : "Password"
     },
     "placeholder": {
       "host": "http://",
       "applicationName": "Application Name",
       "namespace": "app",
-      "applicationid" : "Application Id"
-    },
-    "shared": {
-      "list_api": {
-        "tock": "Tock"
-      }
+      "botId" : "Bot Id",
+      "username": "Username",
+      "password" : "Password"
     }
   }
 }

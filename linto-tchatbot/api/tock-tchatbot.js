@@ -4,34 +4,31 @@ const tts = require('../data/tts')
 
 module.exports = async function (msg) {
   try {
-    if(msg.payload.conversationData){
-      //TODO: WIP
-    }
-    if(!msg.payload.text){ //TODO: no text found
+    if (msg.payload.conversationData) {/*TODO: Future update*/ }
+
+    let tchatbotConfig = this.config.tchatbot
+    if (!tchatbotConfig.host || !tchatbotConfig.namespace || !tchatbotConfig.applicationName || !tchatbotConfig.botId)
+      this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.missingConfig, { message: 'Missing server configuration', code: 500 })
+    else if (!msg.payload.text)//TODO: no text found
       this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.missingText, { message: 'Missing information', code: 500 })
-    }
+    else {
+      let text = msg.payload.text
+      let options = prepareRequest.call(this, text)
+      let requestResult = await this.request.post('http://' + this.config.tchatbot.host + '/rest/admin/test/talk', options)
 
-    let text = msg.payload.text
-    let options = prepareRequest.call(this, text)
-    let requestResult = await this.request.post('http://' + this.config.tchatbot.host + '/rest/admin/test/talk', options)
-
-    let botOutput = wrapper(requestResult)
-    debug(botOutput)
-    let result = {
-      customAction: {},
-      tchatbot : {
-        ask: msg.payload.text,
-        answer : botOutput[0]
+      let botOutput = wrapper(requestResult)
+      let result = {
+        customAction: {},
+        tchatbot: {
+          ask: msg.payload.text,
+          answer: botOutput[0]
+        }
       }
+      this.sendPayloadToLinTO(msg.payload.topic, result)
     }
-
-    //TODO: msg.topic or msg.payload.topic
-    this.sendPayloadToLinTO(msg.payload.topic, result)
-    // return result
   } catch (err) {
-    debug(err)
-    this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.unknown, { message: err.message, code: 500 })
-    throw new Error(err)
+    this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.unknown, { message: err.body, code: 500 })
+    throw new Error(err.body)
   }
 }
 
@@ -41,12 +38,12 @@ function prepareRequest(text) {
   let options = {
     headers: {
       'content-type': 'application/json',
-      Authorization: 'Basic YWRtaW5AYXBwLmNvbTpwYXNzd29yZA=='
+      Authorization: this.config.tchatbot.auth
     },
     body: {
       namespace: this.config.tchatbot.namespace,
       applicationName: this.config.tchatbot.applicationName,
-      botApplicationConfigurationId: this.config.tchatbot.applicationid,
+      botApplicationConfigurationId: this.config.tchatbot.botId,
       language,
       message: {
         eventType: "sentence",
@@ -55,6 +52,7 @@ function prepareRequest(text) {
     },
     json: true
   }
+
   return options
 }
 

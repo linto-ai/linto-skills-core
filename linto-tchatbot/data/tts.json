@@ -8,6 +8,10 @@
       "missingText": {
         "phonetic": "No text found",
         "text": "No text found"
+      },
+      "missingConfig": {
+        "phonetic": "Config is missing",
+        "text": "Config is missing"
       }
     }
   },
@@ -20,6 +24,10 @@
       "missingText": {
         "phonetic": "Pas de text détecté",
         "text": "Pas de text détecté"
+      },
+      "missingConfig": {
+        "phonetic": "Configuration manquante",
+        "text": "Configuration manquante"
       }
     }
   }
