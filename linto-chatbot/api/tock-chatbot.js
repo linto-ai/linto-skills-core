@@ -6,15 +6,15 @@ module.exports = async function (msg) {
   try {
     if (msg.payload.conversationData) {/*TODO: Future update*/ }
 
-    let chatbotConfig = this.config.chatbot
-    if (!chatbotConfig.host || !chatbotConfig.namespace || !chatbotConfig.applicationName || !chatbotConfig.botId)
+    let chatbotConfig = this.config
+    if (!chatbotConfig.host || !chatbotConfig.namespace || !chatbotConfig.appname || !chatbotConfig.botId)
       this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.missingConfig, { message: 'Missing server configuration', code: 500 })
     else if (!msg.payload.text)//TODO: no text found
       this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.missingText, { message: 'Missing information', code: 500 })
     else {
       let text = msg.payload.text
       let options = prepareRequest.call(this, text)
-      let requestResult = await this.request.post('http://' + this.config.chatbot.host + '/rest/admin/test/talk', options)
+      let requestResult = await this.request.post('http://' + this.config.host + '/rest/admin/test/talk', options)
 
       let botOutput = wrapper(requestResult)
       let result = {
@@ -36,15 +36,17 @@ module.exports = async function (msg) {
 function prepareRequest(text) {
   let language = this.getFlowConfig('language').lang
 
+  const auth = 'Basic ' + Buffer.from(this.config.username + ':' + this.config.password).toString('base64')
+
   let options = {
     headers: {
       'content-type': 'application/json',
-      Authorization: this.config.chatbot.auth
+      Authorization: auth
     },
     body: {
-      namespace: this.config.chatbot.namespace,
-      applicationName: this.config.chatbot.applicationName,
-      botApplicationConfigurationId: this.config.chatbot.botId,
+      namespace: this.config.namespace,
+      applicationName: this.config.appname,
+      botApplicationConfigurationId: this.config.botId,
       language,
       message: {
         eventType: "sentence",

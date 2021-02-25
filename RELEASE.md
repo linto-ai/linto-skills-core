@@ -1,3 +1,9 @@
+# 0.1.2
+- Move chatbot config to chatbot node
+
+# 0.1.1
+- Minor fix
+
 # 0.1.0
 - Added tock-chatbot skill
 - Added tock-chatbot configuration node

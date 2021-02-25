@@ -1,6 +1,6 @@
 {
   "name": "@linto-ai/node-red-linto-core",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Recommanded skills to be used by LinTO",
   "scripts": {
     "test": "mocha test",
@@ -22,7 +22,6 @@
       "linto-config-mqtt": "linto-config/mqtt-config/linto-config-mqtt.js",
       "linto-config-transcribe": "linto-config/transcribe-config/linto-config-transcribe.js",
       "linto-config-evaluate": "linto-config/evaluate-config/linto-config-evaluate.js",
-      "linto-config-chatbot": "linto-config/chatbot-config/linto-config-chatbot.js",
       "linto-config": "linto-config/linto-config.js",
       "dictionary-custom": "linto-dictionary/linto-dictionary-custom/linto-dictionary-custom.js",
       "dictionary-color": "linto-dictionary/linto-dictionary-color/linto-dictionary-color.js",

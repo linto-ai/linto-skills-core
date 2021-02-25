@@ -15,10 +15,8 @@ class LintoChatbot extends LintoCoreEventNode {
     super(RED, node, config)
 
     this.config = {
-      ...config,
-      chatbot: { ...this.getFlowConfig('configChatbot') }
+      ...config
     }
-
     this.request = request
     this.init()
   }

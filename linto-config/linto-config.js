@@ -17,8 +17,6 @@ class LintoConfig extends LintoNode {
 
     this.setFlowConfig('confMqtt', RED.nodes.getNode(config.configMqtt).config)
     this.setFlowConfig('configEvaluate', RED.nodes.getNode(config.configEvaluate).config)
-    this.setFlowConfig('configChatbot', RED.nodes.getNode(config.configChatbot).config)
     this.setFlowConfig('configTranscribe', RED.nodes.getNode(config.configTranscribe).config)
-
   }
 }
