@@ -3,7 +3,7 @@ const LintoConnectCoreNode = require('@linto-ai/linto-components').nodes.lintoCo
 const { wireEvent } = require('@linto-ai/linto-components').components
 
 const TOPIC_SUBSCRIBE = '#'
-const TOPIC_FILTER = ['nlp', 'streaming', 'tchatbot']
+const TOPIC_FILTER = ['nlp', 'streaming', 'chatbot']
 
 module.exports = function (RED) {
   function Node(config) {

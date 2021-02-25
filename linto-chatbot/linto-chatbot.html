@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType("linto-tchatbot", {
+    RED.nodes.registerType("linto-chatbot", {
         category: 'services',
         color: '#b5aacb',
         defaults: {
@@ -10,14 +10,14 @@
         inputs: 1,
         outputs: 0,
         icon: "font-awesome/fa-comments-o",
-        paletteLabel: "Tchatbot",
+        paletteLabel: "Chatbot",
         label: function () {
-            return this.name || "linto-tchatbot"
+            return this.name || "linto-chatbot"
         }
     })
 </script>
 
-<script type="text/x-red" data-template-name="linto-tchatbot">
+<script type="text/x-red" data-template-name="linto-chatbot">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-commenting-o"></i> <span data-i18n="linto-tchat.label.name" /> </label>
         <input type="text"id="node-input-name" data-i18n="[placeholder]linto-tchat.placeholder.name" />

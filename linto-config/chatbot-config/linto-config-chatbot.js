@@ -1,7 +1,7 @@
-const debug = require('debug')('linto:skill:v2:core:linto-config:tchatbot-config')
+const debug = require('debug')('linto:skill:v2:core:linto-config:chatbot-config')
 
 module.exports = function (RED) {
-  function LintoConfigTchatbot(n) {
+  function LintoConfigChatbot(n) {
     RED.nodes.createNode(this, n)
     this.host = 'http://' + n.host + '/rest/nlp/parse'
     this.api = n.api
@@ -18,5 +18,5 @@ module.exports = function (RED) {
       this.config.auth = 'Basic ' + Buffer.from(n.username + ':' + n.password).toString('base64')
     }
   }
-  RED.nodes.registerType("linto-config-tchatbot", LintoConfigTchatbot)
+  RED.nodes.registerType("linto-config-chatbot", LintoConfigChatbot)
 }

@@ -1,6 +1,7 @@
 # 0.1.0
-- Added tock-tchatbot skill
-- Added tock-tchatbot configuration node
+- Added tock-chatbot skill
+- Added tock-chatbot configuration node
+- Added connector chatbot web connector
 
 # 0.0.16
 - Remove auth in skill (managed with MQTT-Mongo)

@@ -1,22 +1,22 @@
-const debug = require('debug')('linto:skill:v2:core:linto-tchatbot')
+const debug = require('debug')('linto:skill:v2:core:linto-chatbot')
 const LintoCoreEventNode = require('@linto-ai/linto-components').nodes.lintoCoreEventNode
 const { request } = require('@linto-ai/linto-components').components
 
 module.exports = function (RED) {
   function Node(config) {
     RED.nodes.createNode(this, config)
-    new LintoTchatbot(RED, this, config)
+    new LintoChatbot(RED, this, config)
   }
-  RED.nodes.registerType('linto-tchatbot', Node)
+  RED.nodes.registerType('linto-chatbot', Node)
 }
 
-class LintoTchatbot extends LintoCoreEventNode {
+class LintoChatbot extends LintoCoreEventNode {
   constructor(RED, node, config) {
     super(RED, node, config)
 
     this.config = {
       ...config,
-      tchatbot: { ...this.getFlowConfig('configTchatbot') }
+      chatbot: { ...this.getFlowConfig('configChatbot') }
     }
 
     this.request = request
@@ -24,7 +24,7 @@ class LintoTchatbot extends LintoCoreEventNode {
   }
 
   async init() {
-    let tchatbot = await this.loadModule(`${__dirname}/api/tock-tchatbot`)
-    this.wireNode.onMessage(this, tchatbot)
+    let chatbot = await this.loadModule(`${__dirname}/api/tock-chatbot`)
+    this.wireNode.onMessage(this, chatbot)
   }
 }

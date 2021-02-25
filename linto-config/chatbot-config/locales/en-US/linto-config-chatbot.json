@@ -1,5 +1,5 @@
 {
-  "linto-config-tchatbot": {
+  "linto-config-chatbot": {
     "label": {
       "host": "Host",
       "applicationName": "App Name",
