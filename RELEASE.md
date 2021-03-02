@@ -1,3 +1,6 @@
+# 0.1.3
+- Minro chatbot-skill fix
+
 # 0.1.2
 - Move chatbot config to chatbot node
 

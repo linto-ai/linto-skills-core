@@ -62,15 +62,16 @@ function prepareRequest(text) {
 
 function wrapper(answer) {
   let output = {
+    text: '',
     data: []
   }
   try {
     answer.messages.map(msg => {
       if (msg.text) {
-        output.text = msg.text
+        output.text += msg.text
         output.data.push({
           text: msg.text,
-          evehtType: msg.eventType
+          eventType: msg.eventType
         })
       }
 
