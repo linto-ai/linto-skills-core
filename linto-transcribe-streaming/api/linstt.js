@@ -5,7 +5,7 @@ const DEFAULT_CONFIG = '{"config": {"sample_rate":16000, "metadata":1 }}'
 let websocket = {}
 
 module.exports = async function (msg) {
-  let largeVocabStreaming = this.config.transcribe.largeVocabStreaming
+  let largeVocabStreaming = this.config.transcribe.ws + this.config.transcribe.largeVocabStreaming
   const [_clientCode, _channel, _sn, _etat, _type] = msg.payload.topic.split('/')
   let topic = `${_clientCode}/${_channel}/${_sn}/${_etat}`
 
@@ -26,11 +26,18 @@ module.exports = async function (msg) {
 }
 
 function startWS(host, id, topic, msg) {
-  websocket[id] = new WebSocket('wss://' + host)
+  websocket[id] = new WebSocket(host)
   websocket[id].linto_id = id
   websocket[id].linto_topic = topic
   websocket[id].skillLinto = this
 
+  websocket[id].on('close', () => {
+    console.log('Client disconnected from ' + host)
+  })
+  websocket[id].on('error', () => {
+    console.log('ERROR with host :' + host)
+    stopWS(id)
+  })
 
   websocket[id].on('open', function open() {
     if (msg.payload.config) {
@@ -51,6 +58,7 @@ function startWS(host, id, topic, msg) {
     else if ('eod' in data) this.close()
     else console.error("unsupported msg", data)
   })
+
 }
 
 function stopWS(id) {

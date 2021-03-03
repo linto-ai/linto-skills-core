@@ -1,5 +1,9 @@
+#0.1.4
+- Added config streaming external/internal
+- Handle ws streaming error
+
 # 0.1.3
-- Minro chatbot-skill fix
+- Minor chatbot-skill fix
 
 # 0.1.2
 - Move chatbot config to chatbot node

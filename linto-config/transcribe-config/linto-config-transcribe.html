@@ -14,6 +14,9 @@
             largeVocabStreaming: {
                 value: ""
             },
+            largeVocabStreamingInternal: {
+                value: "true"
+            },
             largeVocabOffline: {
                 value: ""
             }
@@ -48,6 +51,14 @@
     <div class="form-row">
         <label for="node-config-input-largeVocabStreaming"><i class="fa fa-microphone"></i> <span data-i18n="linto-config-transcribe.label.largeVocabStreaming"/></label>
         <input type="text" id="node-config-input-largeVocabStreaming" data-i18n="[placeholder]linto-config-transcribe.placeholder.largeVocabStreaming" />
+    </div>
+
+    <div class="form-row"> 
+        <label for="node-config-input-largeVocabStreamingInternal"><i class="fa fa-tag"></i> <span data-i18n="linto-config-transcribe.label.largeVocabStreamingInternal" /> </label>
+        <select id="node-config-input-largeVocabStreamingInternal" type="select" style="width:70%">
+            <option value="true" data-i18n="linto-config-transcribe.shared.bool.true" />
+            <option value="false" data-i18n="linto-config-transcribe.shared.bool.false" />
+        </select>
     </div>
 
     <div class="form-row">
