@@ -1,0 +1,22 @@
+{
+  "linto-chatbot": {
+    "label": {
+      "name": "Name",
+      "host": "Host",
+      "appname": "App Name",
+      "namespace": "namespace",
+      "botId" : "Bot id",
+      "username": "Username",
+      "password" : "Password"
+    },
+    "placeholder": {
+      "name": "Node name",
+      "host": "http://",
+      "appname": "Application Name",
+      "namespace": "namespace",
+      "botId" : "Bot Id",
+      "username": "Username",
+      "password" : "Password"
+    }
+  }
+}

@@ -5,6 +5,7 @@
       "configMqtt" : "MQTT",
       "configEvaluate" : "Evaluate",
       "configTranscribe" : "Transcribe",
+      "configChatbot" : "Chatbot",
       "language" : "Lang"
     },
     "placeholder":{

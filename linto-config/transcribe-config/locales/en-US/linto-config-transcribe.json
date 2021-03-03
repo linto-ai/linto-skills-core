@@ -4,6 +4,7 @@
       "api": "API",
       "commandOffline" : "Command",
       "largeVocabStreaming" : "Streaming",
+      "largeVocabStreamingInternal" : "Streaming internal",
       "largeVocabOffline" : "Offline large"
     },
     "placeholder": {
@@ -16,6 +17,10 @@
       "list_api": {
         "linstt": "Linstt",
         "bing": "Bing"
+      },
+      "bool": {
+        "true": "true",
+        "false": "false"
       }
     }
   }

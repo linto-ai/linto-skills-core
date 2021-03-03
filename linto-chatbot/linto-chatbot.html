@@ -1,0 +1,73 @@
+<script type="text/javascript">
+    RED.nodes.registerType("linto-chatbot", {
+        category: 'services',
+        color: '#b5aacb',
+        defaults: {
+            name: {
+                value: ""
+            },
+            host: {
+                value: ""
+            },
+            appname: {
+                value: ""
+            },
+            namespace: {
+                value: ""
+            },
+            botId: {
+                value: ""
+            },
+            username: {
+                value: ""
+            },
+            password: {
+                value: ""
+            }
+        },
+        inputs: 1,
+        outputs: 0,
+        icon: "font-awesome/fa-comments-o",
+        paletteLabel: "Chatbot",
+        label: function () {
+            return this.name || "linto-chatbot"
+        }
+    })
+</script>
+
+<script type="text/x-red" data-template-name="linto-chatbot">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-commenting-o"></i> <span data-i18n="linto-chatbot.label.name" /> </label>
+        <input type="text"id="node-input-name" data-i18n="[placeholder]linto-chatbot.placeholder.name" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-host"><i class="fa fa-commenting-o"></i> <span data-i18n="linto-chatbot.label.host" /> </label>
+        <input type="text"id="node-input-host" data-i18n="[placeholder]linto-chatbot.placeholder.host" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-appname"><i class="fa fa-commenting-o"></i> <span data-i18n="linto-chatbot.label.appname" /> </label>
+        <input type="text"id="node-input-appname" data-i18n="[placeholder]linto-chatbot.placeholder.appname" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-namespace"><i class="fa fa-commenting-o"></i> <span data-i18n="linto-chatbot.label.namespace" /> </label>
+        <input type="text"id="node-input-namespace" data-i18n="[placeholder]linto-chatbot.placeholder.namespace" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-botId"><i class="fa fa-commenting-o"></i> <span data-i18n="linto-chatbot.label.botId" /> </label>
+        <input type="text"id="node-input-botId" data-i18n="[placeholder]linto-chatbot.placeholder.botId" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-username"><i class="fa fa-commenting-o"></i> <span data-i18n="linto-chatbot.label.username" /> </label>
+        <input type="text" id="node-input-username" data-i18n="[placeholder]linto-chatbot.placeholder.username" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-password"><i class="fa fa-commenting-o"></i> <span data-i18n="linto-chatbot.label.password" /> </label>
+        <input type="password" id="node-input-password" data-i18n="[placeholder]linto-chatbot.placeholder.password" />
+    </div>
+</script>

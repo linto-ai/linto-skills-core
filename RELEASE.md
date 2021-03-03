@@ -1,3 +1,21 @@
+#0.1.4
+- Added config streaming external/internal
+- Handle ws streaming error
+
+# 0.1.3
+- Minor chatbot-skill fix
+
+# 0.1.2
+- Move chatbot config to chatbot node
+
+# 0.1.1
+- Minor fix
+
+# 0.1.0
+- Added tock-chatbot skill
+- Added tock-chatbot configuration node
+- Added connector chatbot web connector
+
 # 0.0.16
 - Remove auth in skill (managed with MQTT-Mongo)
 

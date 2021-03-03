@@ -1,6 +1,6 @@
 {
   "name": "@linto-ai/node-red-linto-core",
-  "version": "0.0.16",
+  "version": "0.1.4",
   "description": "Recommanded skills to be used by LinTO",
   "scripts": {
     "test": "mocha test",
@@ -35,6 +35,7 @@
       "linto-out": "linto-out/linto-out.js",
       "linto-pipeline-router": "linto-pipeline-router/linto-pipeline-router.js",
       "linto-red-event-emiter": "linto-red-event-emitter/linto-red-event-emitter.js",
+      "linto-chatbot": "linto-chatbot/linto-chatbot.js",
       "linto-terminal-in": "linto-terminal-in/linto-terminal-in.js",
       "linto-transcribe": "linto-transcribe/linto-transcribe.js",
       "linto-transcribe-streaming": "linto-transcribe-streaming/linto-transcribe-streaming.js",
