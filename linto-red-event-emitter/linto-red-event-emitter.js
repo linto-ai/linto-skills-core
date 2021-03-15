@@ -26,14 +26,27 @@ class LintoRedEventEmitter extends LintoCoreNode {
 
 function emitToSkills(msg) {
   let toEmit = msg.payload.nlu.intent
+  let conversationData = undefined
   msg.payload.isConversational = false
 
   if (!!msg.payload.conversationData && Object.keys(msg.payload.conversationData).length !== 0 && !!msg.payload.conversationData.intent) {
     toEmit = msg.payload.conversationData.intent
     msg.payload.nlu.intent = msg.payload.conversationData.intent
+    conversationData = msg.payload.conversationData
     delete msg.payload['conversationData']
     msg.payload.isConversational = true
   }
+
+  if (msg.payload.nlu.isConfidence && msg.payload.nlu.intentProbability <= msg.payload.nlu.confidenceScore) {
+    toEmit = LINTO_OUT_EVENT
+    msg = {
+      topic: msg.payload.topic,
+      payload: { say: tts[this.getFlowConfig('language').language].say.lowConfidence }
+    }
+
+    if (conversationData) msg.payload.conversationData = conversationData
+  }
+
 
   if (!wireEvent.isEventFlow(`${this.node.z}-${toEmit}`)) {
     toEmit = LINTO_OUT_EVENT

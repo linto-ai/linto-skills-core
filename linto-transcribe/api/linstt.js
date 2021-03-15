@@ -10,7 +10,8 @@ module.exports = async function (msg) {
     let audioBuffer = Buffer.from(audio, 'base64')
     delete msg.payload.audio
     if (Buffer.isBuffer(audioBuffer)) {
-      let options = prepareRequest(audioBuffer)
+      let isConfidence = false  // WIP: Do we need confidence with STT ?
+      let options = prepareRequest(audioBuffer, isConfidence)
 
       try {
         let requestUri = this.config.transcribe.host
@@ -20,7 +21,9 @@ module.exports = async function (msg) {
         } else throw new Error('Configuration missing')
 
         let transcriptResult = await this.request.post(requestUri, options)
-        msg.payload.transcript = wrapperLinstt(transcriptResult)
+
+        msg.payload.transcript = wrapperLinstt(transcriptResult, isConfidence)
+
 
         return msg
       } catch (err) {
@@ -32,10 +35,13 @@ module.exports = async function (msg) {
   throw new Error('Input should containt an audio buffer')
 }
 
-function prepareRequest(buffer) {
+function prepareRequest(buffer, isConfidence) {
+  let accept = 'text/plain'
+  if (isConfidence) accept = 'application/json'
+
   let options = {
     headers: {
-      accept: 'text/plain'
+      accept
     },
     formData: {
       file: {
@@ -53,15 +59,26 @@ function prepareRequest(buffer) {
   return options
 }
 
-function wrapperLinstt(transcript) {
-  let text = transcript.toString('utf8')
+function wrapperLinstt(transcript, isConfidence) {
+  let text = ""
+  let confidence = 0
 
-  if (text === undefined || text.length === 0) {
-    throw new Error('Transcription was empty')
+  if (isConfidence) {
+    let jsonTranscript = JSON.parse(transcript)
+    if (jsonTranscript === undefined || jsonTranscript.text.length === 0) throw new Error('Transcription was empty')
+
+    jsonTranscript.speakers.map(speaker => speaker.words.map(words => text += words.word + " "))
+    if (text === "") throw new Error('Transcription was empty')
+
+    confidence = jsonTranscript['confidence-score']
+  } else {
+    text = transcript.toString('utf8')
+    if (text === undefined || text.length === 0) throw new Error('Transcription was empty')
   }
 
   return {
-    text: text,
-    confidence: 0
+    text,
+    confidence,
+    isConfidence
   }
 }
