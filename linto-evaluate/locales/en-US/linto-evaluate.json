@@ -1,7 +1,8 @@
 {
   "linto-evaluate": {
     "label": {
-      "name": "Name"
+      "name": "Name",
+      "confidenceScore" : "Min score"
     },
     "placeholder": {
       "name": "Node name"

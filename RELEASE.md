@@ -1,3 +1,8 @@
+#0.1.5
+- Added confidence score for TOCK
+- Added confidence configuration on evaluate node
+- Implemented confidence score for STT (not use at the moment)
+
 #0.1.4
 - Added config streaming external/internal
 - Handle ws streaming error

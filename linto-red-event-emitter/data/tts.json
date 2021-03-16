@@ -4,6 +4,10 @@
       "unknown": {
         "phonetic": "I don't known what to do",
         "text": "I don't known what to do"
+      },
+      "lowConfidence": {
+        "phonetic": "Confidence score is to low",
+        "text": "Confidence score is to low"
       }
     }
   },
@@ -12,6 +16,10 @@
       "unknown": {
         "phonetic": "Je ne sais pas quoi faire",
         "text": "Je ne sais pas quoi faire"
+      },
+      "lowConfidence": {
+        "phonetic": "Je ne suis pas sur de la demande",
+        "text": "Je ne suis pas sur de la demande"
       }
     }
   }

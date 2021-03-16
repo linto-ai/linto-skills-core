@@ -6,7 +6,7 @@ module.exports = async function (msg) {
   try {
     let options = prepareRequest.call(this, msg)
     let requestResult = await this.request.post('http://' + this.config.evaluate.host + '/rest/nlp/parse', options)
-    let wrappedNlu = wrapperTock(requestResult)
+    let wrappedNlu = wrapperTock(requestResult, this.config)
     msg.payload.nlu = wrappedNlu
 
     return msg
@@ -35,12 +35,16 @@ function prepareRequest(msg) {
   return options
 }
 
-function wrapperTock(nluData) {
+function wrapperTock(nluData, config) {
   try {
-
     const text = nluData.retainedQuery
-    let wrappedPayload = {}
-    wrappedPayload.intent = nluData.intent
+    let wrappedPayload = {
+      intent : nluData.intent,
+      isConfidence : config.confidence,
+      confidenceScore : config.confidenceScore,
+      intentProbability : nluData.intentProbability,
+      entitiesProbability : nluData.entitiesProbability
+    }
 
     if (nluData.entities.length) {
       wrappedPayload.entitiesNumber = nluData.entities.length
