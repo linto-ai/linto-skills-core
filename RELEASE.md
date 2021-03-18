@@ -1,3 +1,6 @@
+#0.1.6
+- Remove dictionary, they now have their own module / repository
+
 #0.1.5
 - Added confidence score for TOCK
 - Added confidence configuration on evaluate node

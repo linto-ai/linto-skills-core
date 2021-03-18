@@ -1,6 +1,6 @@
 {
   "name": "@linto-ai/node-red-linto-core",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Recommanded skills to be used by LinTO",
   "scripts": {
     "test": "mocha test",
@@ -24,11 +24,6 @@
       "linto-config-evaluate": "linto-config/evaluate-config/linto-config-evaluate.js",
       "linto-config": "linto-config/linto-config.js",
       "dictionary-custom": "linto-dictionary/linto-dictionary-custom/linto-dictionary-custom.js",
-      "dictionary-color": "linto-dictionary/linto-dictionary-color/linto-dictionary-color.js",
-      "dictionary-continent": "linto-dictionary/linto-dictionary-continent/linto-dictionary-continent.js",
-      "dictionary-countrie": "linto-dictionary/linto-dictionary-countrie/linto-dictionary-countrie.js",
-      "dictionary-french-department": "linto-dictionary/linto-dictionary-french-department/linto-dictionary-french-department.js",
-      "dictionary-french-region": "linto-dictionary/linto-dictionary-french-region/linto-dictionary-french-region.js",
       "linto-evaluate": "linto-evaluate/linto-evaluate.js",
       "linto-model-dataset": "linto-model-dataset/linto-model-dataset.js",
       "linto-on-connect": "linto-on-connect/linto-on-connect.js",
