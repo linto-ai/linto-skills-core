@@ -1,3 +1,6 @@
+#0.1.7
+- Update chatbot, use TOCK Rest api path
+
 #0.1.6
 - Remove dictionary, they now have their own module / repository
 

@@ -1,21 +1,27 @@
 const debug = require('debug')(`linto:skill:v2:core:chatbot:tock`)
 
 const tts = require('../data/tts')
+const eventType = {
+  attachment: 'attachment',
+  button: 'choice',
+  sentence: 'sentence'
+}
 
 module.exports = async function (msg) {
   try {
     if (msg.payload.conversationData) {/*TODO: Future update*/ }
 
     let chatbotConfig = this.config
-    if (!chatbotConfig.host || !chatbotConfig.namespace || !chatbotConfig.appname || !chatbotConfig.botId)
+    if (!chatbotConfig.rest)
       this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.missingConfig, { message: 'Missing server configuration', code: 500 })
     else if (!msg.payload.text)//TODO: no text found
       this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.missingText, { message: 'Missing information', code: 500 })
     else {
       let text = msg.payload.text
-      let options = prepareRequest.call(this, text)
-      let requestResult = await this.request.post('http://' + this.config.host + '/rest/admin/test/talk', options)
-
+      const [_clientCode, _channel, _sn, _etat, _type, _id] = msg.payload.topic.split('/')
+      let options = prepareRequest.call(this, text, _sn)
+      let requestResult = await this.request.post('http://' + process.env.LINTO_STACK_TOCK_BOT_API + ':' + process.env.LINTO_STACK_TOCK_SERVICE_PORT + this.config.rest, options)
+      LINTO_STACK_TOCK_SERVICE_PORT = 8080
       let botOutput = wrapper(requestResult)
       let result = {
         customAction: {},
@@ -33,25 +39,14 @@ module.exports = async function (msg) {
   }
 }
 
-function prepareRequest(text) {
-  let language = this.getFlowConfig('language').lang
-
-  const auth = 'Basic ' + Buffer.from(this.config.username + ':' + this.config.password).toString('base64')
-
+function prepareRequest(text, userId) {
   let options = {
     headers: {
-      'content-type': 'application/json',
-      Authorization: auth
+      'content-type': 'application/json'
     },
     body: {
-      namespace: this.config.namespace,
-      applicationName: this.config.appname,
-      botApplicationConfigurationId: this.config.botId,
-      language,
-      message: {
-        eventType: "sentence",
-        text
-      },
+      query: text,
+      userId: userId
     },
     json: true
   }
@@ -65,41 +60,33 @@ function wrapper(answer) {
     text: '',
     data: []
   }
+
   try {
-    answer.messages.map(msg => {
+    answer.responses.map(msg => {
       if (msg.text) {
-        output.text += msg.text
+        output.text += ' ' + msg.text
         output.data.push({
           text: msg.text,
-          eventType: msg.eventType
+          eventType: eventType.sentence
         })
       }
 
-      if (msg.messages) {
-        msg.messages.map(msgConnector => {
-          if (msgConnector.connectorType && msgConnector.connectorType.id === 'web') {
-            if (msgConnector.texts && msgConnector.texts.text) {
-              output.text += msgConnector.texts.text
-              output.data.push({
-                text: msgConnector.texts.text,
-                eventType: msg.eventType
-              })
-            }
-            msgConnector.choices.map(choice => {
-              output.data.push({
-                eventType: choice.eventType,
-                intentName: choice.intentName,
-                text: choice.parameters._nlp
-              })
-            })
-            msgConnector.attachments.map(attachment => {
-              output.data.push({
-                eventType: attachment.eventType,
-                url: attachment.url
-              })
-            })
+      if (msg.buttons) {
+        msg.buttons.map(button => {
+          output.data.push({
+            text: button.title,
+            eventType: eventType.button
+          })
+        })
+      }
 
-          }
+      if (msg.card) {
+        output.data.push({
+          title: msg.card.title,
+          subTitle: msg.card.subTitle,
+          file: msg.card.file,
+          type: msg.card.file.type,
+          eventType: eventType.attachment
         })
       }
     })
