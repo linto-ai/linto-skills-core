@@ -8,20 +8,26 @@ const eventType = {
 }
 
 module.exports = async function (msg) {
+  let node = this
+
   try {
+    process.env.LINTO_STACK_TOCK_BOT_API = "localhost"
+    process.env.LINTO_STACK_TOCK_SERVICE_PORT = "8080"
     if (msg.payload.conversationData) {/*TODO: Future update*/ }
+
+    node.sendStatus('green', 'ring')
 
     let chatbotConfig = this.config
     if (!chatbotConfig.rest)
-      this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.missingConfig, { message: 'Missing server configuration', code: 500 })
-    else if (!msg.payload.text)//TODO: no text found
-      this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.missingText, { message: 'Missing information', code: 500 })
+      notifyError.call(this, msg.payload.topic, tts[this.getFlowConfig('language').language].say.missingText, { message: 'Missing server configuration', code: 500 })
+    else if (!msg.payload.text) //TODO: no text found
+      notifyError.call(this, msg.payload.topic, tts[this.getFlowConfig('language').language].say.missingText, { message: 'Missing information', code: 500 })
     else {
       let text = msg.payload.text
       const [_clientCode, _channel, _sn, _etat, _type, _id] = msg.payload.topic.split('/')
       let options = prepareRequest.call(this, text, _sn)
       let requestResult = await this.request.post('http://' + process.env.LINTO_STACK_TOCK_BOT_API + ':' + process.env.LINTO_STACK_TOCK_SERVICE_PORT + this.config.rest, options)
-      LINTO_STACK_TOCK_SERVICE_PORT = 8080
+
       let botOutput = wrapper(requestResult)
       let result = {
         customAction: {},
@@ -31,12 +37,22 @@ module.exports = async function (msg) {
         }
       }
 
+      setTimeout(function () {
+        node.cleanStatus()
+      }, node.statusTimer)
+
       this.sendPayloadToLinTO(msg.payload.topic, result)
     }
   } catch (err) {
-    this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.unknown, { message: err.body, code: 500 })
+    notifyError.call(this, msg.payload.topic, tts[this.getFlowConfig('language').language].say.missingText, { message: err.body, code: 500 })
     throw new Error(err.body)
   }
+}
+
+function notifyError(topic, msg, err) {
+  let node = this
+  node.sendStatus('red', 'ring', err.message)
+  this.notifyEventError(topic, msg, err)
 }
 
 function prepareRequest(text, userId) {

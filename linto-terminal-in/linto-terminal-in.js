@@ -3,7 +3,7 @@ const LintoConnectCoreNode = require('@linto-ai/linto-components').nodes.lintoCo
 const { wireEvent } = require('@linto-ai/linto-components').components
 
 const TOPIC_SUBSCRIBE = '#'
-const TOPIC_FILTER = ['nlp', 'streaming', 'chatbot']
+const TOPIC_FILTER = ['nlp', 'streaming', 'chatbot', 'skills']
 
 module.exports = function (RED) {
   function Node(config) {
@@ -46,8 +46,11 @@ function mqttHandler(topic, payload) {
     case 'streaming':
       this.topicHandler.lvcsrstreaming.call(this, topic, payload)
       break
-    case 'tchat':
+    case 'chatbot':
       this.topicHandler.tchat.call(this, topic, payload)
+      break
+    case 'skills':  // For skills, _type = _skill_name
+      this.topicHandler.skills.call(this, topic, payload)
       break
     default:
       console.error('No data to store message')

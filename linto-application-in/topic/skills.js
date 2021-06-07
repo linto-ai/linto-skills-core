@@ -1,15 +1,15 @@
-const debug = require('debug')(`linto:skill:v2:core:application-in:topic:chatbot`)
+const debug = require('debug')(`linto:skill:v2:core:application-in:topic:skills`)
 
 module.exports = async function (topic, rawPayload) {
   try {
     const payload = JSON.parse(rawPayload)
+    const [_clientCode, _channel, _sn, _etat, _skill_name, _action_name] = topic.split('/')
+    const output = `${_clientCode}/tolinto/${_sn}/skills/${_skill_name}/${_action_name}`
 
-    const [_clientCode, _channel, _sn, _etat, _type] = topic.split('/')
-    const output = `${_clientCode}/tolinto/${_sn}/chatbot/${_type}`
     this.wireNode.nodeSend(this.node, {
       payload: {
         topic: output,
-        text: payload.text,
+        data: payload.data,
         conversationData: payload.conversationData
       }
     })

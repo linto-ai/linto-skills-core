@@ -23,7 +23,7 @@ function prepareRequest(msg) {
       'content-type': 'application/json'
     },
     body: {
-      queries: [msg.payload.transcript.text],
+      queries: [msg.payload.transcript],
       namespace: this.config.evaluate.namespace,
       applicationName: this.config.evaluate.applicationName,
       context: {

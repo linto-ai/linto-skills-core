@@ -1,3 +1,9 @@
+#0.1.9
+- Added actions mqtt topic
+
+#0.1.8
+- Clean code node streaming
+
 #0.1.7
 - Update chatbot, use TOCK Rest api path
 

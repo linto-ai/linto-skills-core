@@ -5,6 +5,8 @@ const { redAction } = require('@linto-ai/linto-components').components
 const tts = require('./data/tts')
 const error = require('./data/error')
 
+const ACTION_EVENT_BASE_NAME = 'customAction'
+
 module.exports = function (RED) {
   function Node(config) {
     RED.nodes.createNode(this, config)
@@ -30,6 +32,9 @@ class LintoPipelineRouter extends LintoCoreEventNode {
 
 function routerOutputManager(msg) {
   const [_clientCode, _channel, _sn, _etat, _type, _id] = msg.payload.topic.split('/')
+  const _skill = _type
+  const _action = _id
+
   msg.payload.topic = `${_clientCode}/tolinto/${_sn}/${_etat}/${_type}`
 
   switch (_etat) {
@@ -40,9 +45,15 @@ function routerOutputManager(msg) {
     case 'streaming':
       checkNodeAndSendMsg.call(this, 'linto-transcribe-streaming', [null, msg, null], 1)
       break
-    case 'chatbot':
-      checkNodeAndSendMsg.call(this, 'linto-chatbot', [null, null, msg], 2)
-      // this.wireNode.nodeSend(this.node, [null, null, msg])  //TODO: Linto don't support action yet
+    case 'chatbot': //TODO: Rework to skills/chatbot/text
+      const isChatBotFind = checkNodeInFlow.call(this, 'linto-chatbot', undefined, msg)
+      if (isChatBotFind) this.wireEvent.notify(`${this.node.z}-linto-chatbot`, msg)
+      else this.sendPayloadToLinTO(msg.payload.topic, { streaming: { status: "error", message: error.unsuportedSkill } })
+      break
+    case 'skills':
+      msg.payload.topic = `${_clientCode}/tolinto/${_sn}/${ACTION_EVENT_BASE_NAME}/${_skill}/${_action}`
+      if (checkNodeInFlow.call(this, `linto-skill-${_skill}`, _action, msg))
+        this.wireEvent.notify(`${this.node.z}-${ACTION_EVENT_BASE_NAME}-${_action}`, msg)
       break
     default:
       this.sendPayloadToLinTO(msg.payload.topic, { streaming: { status: "error", message: error.unsuportedTopic } })
@@ -55,4 +66,18 @@ function checkNodeAndSendMsg(searchedNode, msg, msgIndex) {
   if (nextNode && this.node.wires[msgIndex].find(id => nextNode.id === id))
     this.wireNode.nodeSend(this.node, msg)
   else this.sendPayloadToLinTO(msg.payload.topic, { error: { status: "error", message: error.unsuportedSkill } })
+}
+
+function checkNodeInFlow(nodeName, action, msg) {
+  if (redAction.findNodeType.call(this.RED, this.node.z, `${nodeName}`)) {
+    if (!action || checkActionNode.call(this, action, msg)) return true
+  } else this.sendPayloadToLinTO(msg.payload.topic, { error: { status: "error", message: error.unsuportedSkill } })
+  return false
+}
+
+function checkActionNode(action, msg) {
+  if (this.wireEvent.isEventFlow(`${this.node.z}-${ACTION_EVENT_BASE_NAME}-${action}`)) return true
+
+  this.sendPayloadToLinTO(msg.payload.topic, { error: { status: "error", message: error.unsuportedAction } })
+  return false
 }

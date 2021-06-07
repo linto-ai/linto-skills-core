@@ -19,6 +19,14 @@ class LintoChatbot extends LintoCoreEventNode {
     }
     this.request = request
     this.init()
+
+    const chatBotController = require(`${__dirname}/api/tock-chatbot`)
+    this.wireEvent.subscribe(this.node.z, this.node.type, chatBotController.bind(this))
+
+    this.node.on('close', (remove, done) => {
+      this.wireEvent.unsubscribe(`${this.node.z}-${this.node.type}`)
+      done()
+    })
   }
 
   async init() {

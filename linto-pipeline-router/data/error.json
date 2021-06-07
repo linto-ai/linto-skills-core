@@ -10,5 +10,9 @@
   "unsuportedSkill" : {
     "message" : "The flow don't have the require skill",
     "code" : 500
+  },
+  "unsuportedAction": {
+    "message" : "The flow don't have the require action",
+    "code" : 500
   }
 }
