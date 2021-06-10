@@ -5,6 +5,12 @@
         defaults: {
             name: {
                 value: ""
+            },
+            useConfidenceScore: {
+                value: false
+            },
+            confidenceThreshold: {
+                value: 0
             }
         },
         inputs: 1,
@@ -22,4 +28,20 @@
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="linto-transcribe.label.name" /> </label>
         <input type="text" id="node-input-name" data-i18n="[placeholder]linto-transcribe.placeholder.name" />
     </div>
+
+    <div class="form-row">
+        <input type="checkbox" id="node-input-useConfidenceScore" style="display: inline-block; width: auto; vertical-align: top;" autocomplete="off">
+        <label for="node-input-useConfidenceScore" style="width: auto;">Use confidence score <span id="confidence-helper" class="fa fa-question"></span></label>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-percent"></i> <span data-i18n="linto-transcribe.label.confidenceThreshold" /> </label>
+        <input type="number" step="5" min="0" max="100" id="node-input-confidenceThreshold" placeholder="50" >
+    </div>
+
+    <style>
+        #confidence-helper:hover:after{
+            content: "Utterance confidence score below the specified threshold will not try to get understood as a command. In this scenario LinTO will answer as feedback 'Confidence is to low'";
+        }
+    </style>
 </script>

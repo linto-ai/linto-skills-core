@@ -1,3 +1,6 @@
+#0.2.0
+- Added conference score to transcribe node
+
 #0.1.9
 - Added actions mqtt topic
 

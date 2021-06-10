@@ -36,7 +36,7 @@ function routerOutputManager(msg) {
   const _action = _id
 
   msg.payload.topic = `${_clientCode}/tolinto/${_sn}/${_etat}/${_type}`
-
+  msg.payload.data = {}
   switch (_etat) {
     case 'nlp':
       msg.payload.topic += '/' + _id

@@ -37,8 +37,9 @@ function emitToSkills(msg) {
     msg.payload.isConversational = true
   }
 
-  if (msg.payload.nlu.isConfidence && msg.payload.nlu.intentProbability <= msg.payload.nlu.confidenceScore) {
-    toEmit = LINTO_OUT_EVENT
+  if ((msg.payload.data.confidence.linstt.useConfidenceScore && msg.payload.data.confidence.linstt.confidenceScore <= msg.payload.data.confidence.linstt.confidenceThreshold)
+    || (msg.payload.data.confidence.nlu.useConfidenceScore && msg.payload.data.confidence.nlu.intentProbability <= msg.payload.data.confidence.nlu.confidenceThreshold)) {
+      toEmit = LINTO_OUT_EVENT
     msg = {
       topic: msg.payload.topic,
       payload: { say: tts[this.getFlowConfig('language').language].say.lowConfidence }
@@ -46,7 +47,6 @@ function emitToSkills(msg) {
 
     if (conversationData) msg.payload.conversationData = conversationData
   }
-
 
   if (!wireEvent.isEventFlow(`${this.node.z}-${toEmit}`)) {
     toEmit = LINTO_OUT_EVENT

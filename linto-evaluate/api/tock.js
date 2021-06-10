@@ -5,9 +5,11 @@ const tts = require('../data/tts')
 module.exports = async function (msg) {
   try {
     let options = prepareRequest.call(this, msg)
+
     let requestResult = await this.request.post('http://' + this.config.evaluate.host + '/rest/nlp/parse', options)
-    let wrappedNlu = wrapperTock(requestResult, this.config)
-    msg.payload.nlu = wrappedNlu
+    let wrappedData = wrapperTock(requestResult, this.config)
+    msg.payload.nlu = wrappedData.nlu
+    msg.payload.data.confidence.nlu = { ...wrappedData.confidence.nlu }
 
     return msg
   } catch (err) {
@@ -37,19 +39,24 @@ function prepareRequest(msg) {
 
 function wrapperTock(nluData, config) {
   try {
+    let output = { confidence: {} }
     const text = nluData.retainedQuery
-    let wrappedPayload = {
-      intent : nluData.intent,
-      isConfidence : config.confidence,
-      confidenceScore : config.confidenceScore,
-      intentProbability : nluData.intentProbability,
-      entitiesProbability : nluData.entitiesProbability
+
+    output.confidence.nlu = {
+      useConfidenceScore: config.useConfidenceScore,
+      confidenceThreshold: config.confidenceThreshold / 100,
+      intentProbability: nluData.intentProbability,
+      entitiesProbability: nluData.entitiesProbability
+    }
+
+    output.nlu = {
+      intent: nluData.intent,
     }
 
     if (nluData.entities.length) {
-      wrappedPayload.entitiesNumber = nluData.entities.length
+      output.nlu.entitiesNumber = nluData.entities.length
     }
-    wrappedPayload.entities = []
+    output.nlu.entities = []
 
     for (const entity of nluData.entities) {
       let wrappedEntity = entity
@@ -61,10 +68,10 @@ function wrapperTock(nluData, config) {
 
       wrappedEntity.value = textEntitie
       wrappedEntity.entity = entity.entity.role
-      wrappedPayload.entities.push(wrappedEntity)
+      output.nlu.entities.push(wrappedEntity)
     }
 
-    return wrappedPayload
+    return output
   } catch (err) {
     throw err
   }
