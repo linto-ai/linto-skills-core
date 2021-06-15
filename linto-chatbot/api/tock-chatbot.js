@@ -11,8 +11,6 @@ module.exports = async function (msg) {
   let node = this
 
   try {
-    process.env.LINTO_STACK_TOCK_BOT_API = "localhost"
-    process.env.LINTO_STACK_TOCK_SERVICE_PORT = "8080"
     if (msg.payload.conversationData) {/*TODO: Future update*/ }
 
     node.sendStatus('green', 'ring')

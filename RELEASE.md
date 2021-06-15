@@ -1,3 +1,6 @@
+#0.2.1
+- Fix forcing chatbot host (dev)
+
 #0.2.0
 - Added conference score to transcribe node
 
