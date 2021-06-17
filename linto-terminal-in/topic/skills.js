@@ -10,7 +10,7 @@ module.exports = async function (topic, rawPayload) {
     this.wireNode.nodeSend(this.node, {
       payload: {
         topic: output,
-        data: payload.data,
+        action: payload,
         conversationData: payload.conversationData
       }
     })
